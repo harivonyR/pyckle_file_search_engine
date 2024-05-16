@@ -1,0 +1,64 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+        <style>
+        ul {
+            list-style-type: none;
+            margin-left: 20px;
+            padding: 0;
+        }
+        .folder {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search</h1>
+    <form action="/search" method="post">
+        <label for="search_string">Search String:</label>
+        <input type="text" id="search_string" name="search_string" required>
+        <label for="filter">Filter:</label>
+        <input type="text" id="filter" name="filter">
+        <button type="submit">Search</button>
+    </form>
+
+    <h1> Results</h1>
+    <p>Search String: {{ search_string }}</p>
+    <p>Filter: {{ filter }}</p>
+    
+    <h1>Search Result</h1>
+    <p>Search String: {{ search_string }}</p>
+    <p>Filter: {{ filter }}</p>
+    <div>
+        <ul>
+            <li>niveau 1
+                <ul>
+                    <li> niveau 2
+                        <ul>
+                            <li>AAA SARL AU 060318.xls</li>
+                            <li>NOUVEAU PRIX AAA DU 241117.pdf</li>
+                            <li>REVISION DE REMISE AAA CE 231117.pdf</li>
+                        </ul>
+                    </li>
+                    <li> niveau 2
+                        <ul>
+                            <li>AAA SARL AU 060318.xls</li>
+                            <li>NOUVEAU PRIX AAA DU 241117.pdf</li>
+                            <li>REVISION DE REMISE AAA CE 231117.pdf</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        
+    </div>
+    
+    <ul><li><ul><li><ul><li>192.168.130.231<ul><li>adv$<ul><li>GED<ul><li>CLIENTS<ul><li>AAA<ul><li>AUTRES DOSSIERS<ul><li>AAA SARL AU 060318.xls</li><li>NOUVEAU PRIX AAA DU 241117.pdf</li><li>REVISION DE REMISE AAA CE 231117.pdf</li></ul></li><li>COORDONNEE FISCAL<ul><li>CIF 2017 - SOCIETE AAA.jpg</li></ul></li><li>FICHE CLIENT<ul><li>FICHE ET DOSSIERS AAA CE 200717.pdf</li><li>FICHE ET DOSSIERS AAA CE 270419.pdf</li><li>FICHE ET DOSSIERS AAA CE 270618.pdf</li><li>FICHE ET DOSSIERS AAA CE 310817.pdf</li></ul></li><li>SPECIMEN<ul><li>SPECIMEN AAA CE 270618.pdf</li></ul></li></ul></li></ul></li></ul></li></ul></li></ul></li></ul></li></ul></li></ul>
+
+</body>
+</html>

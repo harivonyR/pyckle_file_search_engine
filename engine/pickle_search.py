@@ -40,7 +40,6 @@ class SearchEngine:
     def search_file(self, term, search_type = 'contains'): 
         ''' search for term based on search type '''
         # reset variables
-        self.results_file.clear()
         res = []
         matches = 0
         records = 0

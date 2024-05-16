@@ -21,3 +21,15 @@ def print_dict_tree(data_tree, indent=0):
         print("  " * indent + "- " + key)
         if isinstance(value, dict):
             print_dict_tree(value, indent + 1)
+
+
+def dict_to_html_list(data_tree, base_path=""):
+    html = "<ul>"
+    for key, value in data_tree.items():
+        full_path = f"{base_path}/{key}".strip("/")
+        if value is None:
+            html += f'<li><a href="{full_path}">{key}</a></li>'
+        else:
+            html += f'<li>{key}{dict_to_html_list(value, full_path)}</li>'
+    html += "</ul>"
+    return html

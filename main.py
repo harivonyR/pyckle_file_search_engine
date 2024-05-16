@@ -6,7 +6,7 @@ Created on Fri May 10 16:07:31 2024
 """
 
 from engine.pickle_search import SearchEngine
-from util.spliter import path_parse_dict, print_dict_tree
+from util.spliter import path_parse_dict, print_dict_tree,dict_to_html_list
 
 # INIT
 s = SearchEngine()
@@ -24,6 +24,7 @@ while(status=="Y"):
     # FORMATING RESULT
     res_dict = path_parse_dict(res)
     print_dict_tree(res_dict)
+    tmp_html = dict_to_html_list(res_dict)
     
     print()
     print("------------------------------------------")
