@@ -1,0 +1,43 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+        <style>
+        ul {
+            list-style-type: none;
+            margin-left: 20px;
+            padding: 0;
+        }
+        .folder {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search</h1>
+    <form action="/search" method="post">
+        <label for="search_string">Search String:</label>
+        <input type="text" id="search_string" name="search_string" required>
+        <label for="filter">Filter:</label>
+        <input type="text" id="filter" name="filter">
+        <button type="submit">Search</button>
+    </form>
+
+    <h1> Results</h1>
+    <p>Search String: {{ search_string }}</p>
+    <p>Filter: {{ filter }}</p>
+    
+    <h1>Search Result</h1>
+    <p>Search String: {{ search_string }}</p>
+    <p>Filter: {{ filter }}</p>
+    <div>
+        {{ response|safe }}
+    </div>
+    </ul>
+
+</body>
+</html>

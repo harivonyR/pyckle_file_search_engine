@@ -41,12 +41,13 @@ class SearchEngine:
         ''' search for term based on search type '''
         # reset variables
         self.results_file.clear()
-        self.matches = 0
-        self.records = 0
+        res = []
+        matches = 0
+        records = 0
         
         for path, dirs, files in self.file_index:
             for file in files:
-                self.records += 1
+                records += 1
                 if (
                     search_type == "contains"
                     and term.lower() in file.lower()
@@ -56,16 +57,16 @@ class SearchEngine:
                     and file.lower().endswith(term.lower())
                 ):
                     result = path.replace("\\", "/") + "/" + file
-                    self.results_file.append(result)
-                    self.matches+=1
+                    #self.results_file.append(result)
+                    res.append(result)
+                    matches+=1
                 else:
                     continue
 
-        # save search results
-        with open('file_results.tx','w') as f:
-            for row in self.results_file:
-                f.write(row + '\n')
-                
+        return res,matches,records
+    
+
+    # todo : match method with search_file            
     def search_dir(self, term, search_type = 'contains'): 
         ''' search for term based on search type '''
         # reset variables
@@ -94,7 +95,7 @@ class SearchEngine:
         with open('folder_results.tx','w') as f:
             for row in self.results_folder:
                 f.write(row + '\n')
-        
+'''
     def print_result(self,result_type="file"):
         if result_type == "file" :
             print()
@@ -120,3 +121,4 @@ class SearchEngine:
 # OPTIMIZATION
 # rechercher aussi dans path
 # 
+'''
