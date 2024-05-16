@@ -1,43 +1,69 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/result.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
     <title>Search Results</title>
         <style>
-        ul {
-            list-style-type: none;
-            margin-left: 20px;
-            padding: 0;
-        }
-        .folder {
-            font-weight: bold;
-        }
+
     </style>
 </head>
 <body>
-    <h1>Search</h1>
-    <form action="/search" method="post">
-        <label for="search_string">Search String:</label>
-        <input type="text" id="search_string" name="search_string" required>
-        <label for="filter">Filter:</label>
-        <input type="text" id="filter" name="filter">
-        <button type="submit">Search</button>
-    </form>
-
-    <h1> Results</h1>
-    <p>Search String: {{ search_string }}</p>
-    <p>Filter: {{ filter }}</p>
-    
-    <h1>Search Result</h1>
-    <p>Search String: {{ search_string }}</p>
-    <p>Filter: {{ filter }}</p>
     <div>
-        {{ response|safe }}
+        <div>
+            <h1>Search</h1>
+            <form action="/search" method="post">
+                <label for="search_string">Search String:</label>
+                <input type="text" id="search_string" name="search_string" required>
+                <label for="filter">Filter:</label>
+                <input type="text" id="filter" name="filter">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- File List Section -->
+                <div id="file-list" class="col-md-6 p-3">
+                    <h2>Search Result</h2>
+                    <p>Search String: {{ search_string }}</p>
+                    <p>Filter: {{ filter }}</p>
+                    <h2>Directory Tree</h2>
+                    <div>
+                        {{ response|safe }}
+                    </div>
+                </div>
+                <!-- Preview Section -->
+                <div id="preview" class="col-md-6 p-3">
+                    <h1>File Preview</h1>
+                    <iframe id="file-preview" src=""></iframe>
+                </div>
+            </div>
+        </div>
     </div>
-    </ul>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const links = document.querySelectorAll("#file-list a");
+
+            links.forEach(link => {
+                link.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    const url = link.getAttribute("href");
+
+                    // Update iframe src to show the file preview
+                    document.getElementById("file-preview").src = url;
+                });
+            });
+        });
+    </script>
+
 
 </body>
 </html>
