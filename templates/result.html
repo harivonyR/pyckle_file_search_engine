@@ -36,8 +36,10 @@
                     </div>
                 </div>
                 <!-- Preview Section -->
-                <div id="preview" class="col-md-6 p-3">
-                    <h1>File Preview</h1>
+                <div id="preview" class="col-md-6 p-3" style="position: sticky;right: 0;top:0">
+                    <div>
+                        <h3>File Preview : </h3> <span id="doc-name"></span>
+                    </div>
                     <iframe id="file-preview" src=""></iframe>
                 </div>
             </div>
@@ -59,6 +61,7 @@
 
                     // Update iframe src to show the file preview
                     document.getElementById("file-preview").src = url;
+                    document.getElementById("doc-name").innerText = link.innerText;
                 });
             });
         });
