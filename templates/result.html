@@ -5,41 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/result.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
     <title>Search Results</title>
-        <style>
-
-    </style>
 </head>
 <body>
-    <div>
-        <div>
-            <h1>Search</h1>
-            <form action="/search" method="post">
-                <label for="search_string">Search String:</label>
-                <input type="text" id="search_string" name="search_string" required>
-                <label for="filter">Filter:</label>
-                <input type="text" id="filter" name="filter">
-                <button type="submit">Search</button>
-            </form>
-        </div>
-        <div class="container-fluid">
-            <div class="row">
-                <!-- File List Section -->
-                <div id="file-list" class="col-md-6 p-3">
-                    <h2>Search Result</h2>
-                    <p>Search String: {{ search_string }}</p>
-                    <p>Filter: {{ filter }}</p>
-                    <h2>Directory Tree</h2>
+    <div class="search-container d-flex justify-content-center align-self-center" style="height: 100px;">
+        <form action="/search" class="d-flex" method="post">
+            <div class="d-flex flex-column align-self-center m-3">
+                <div class="input-group m-2">
+                    <input type="text"class="input-group rounded form-control" style="width: 300px;" id="search_string" name="search_string" placeholder="Search" value="{{ search_string }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Search</button>
+                      </div>
+                </div>
+                <div class="filter-section d-flex flex-row">
+                    <div class="d-flex">
+                        <div>
+                            <!-- -->
+                            <label for="station" class="form-check-label">Station</label>
+                            <input type="checkbox" id="station"  class="form-check-input" name="filter_type" value="station" checked>
+                        </div>
+                        <div>
+                            <label for="client" class="form-check-label">Client</label>
+                            <input type="checkbox" class="form-check-input"   id="client" name="filter_type" value="client" checked>
+                        </div>
+                    </div>
                     <div>
-                        {{ response|safe }}
+                        <label for="stations_dropdown">Stations:</label>
+                        <select id="stations_dropdown" class="d-form-control form-control-sm"  name="stations_dropdown">
+                            <option value="station1">Station 1</option>
+                            <option value="station2">Station 2</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="clients_dropdown">Clients:</label>
+                        <select id="clients_dropdown" class="d-form-control form-control-sm" name="clients_dropdown">
+                            <!-- Options should be dynamically populated -->
+                            <option value="client1">Client 1</option>
+                            <option value="client2">Client 2</option>
+                            <!-- Add more options as needed -->
+                        </select>
                     </div>
                 </div>
-                <!-- Preview Section -->
-                <div id="preview" class="col-md-6 p-3" style="position: sticky;right: 0;top:0">
-                    <div>
-                        <h3>File Preview : </h3> <span id="doc-name"></span>
-                    </div>
+            </div>
+        </form>
+    </div>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div id="file-list" class="col-md-6 p-3">
+                <h4>DOCUMENT</h4>
+                <div>
+                    {{ response|safe }}
+                </div>
+            </div>
+            <div id="preview" class="col-md-6 p-3" style="position: sticky; top: 20px;">
+                <div class="d-flex align-items-center">
+                    <div><h4>PREVIEW /</h4></div>
+                    <div id="doc-name"></div>
+                </div>
+                <div class="sticky-top">
                     <iframe id="file-preview" src=""></iframe>
                 </div>
             </div>
@@ -54,19 +79,22 @@
         document.addEventListener("DOMContentLoaded", function() {
             const links = document.querySelectorAll("#file-list a");
 
-            links.forEach(link => {
-                link.addEventListener("click", function(event) {
+            links.forEach(link =>{
+                link.addEventListener("click", function(event){
                     event.preventDefault();
                     const url = link.getAttribute("href");
 
-                    // Update iframe src to show the file preview
+                    const fileExtension = url.split('.').pop();
+
+                    if(fileExtension === 'xlsx'){
+                        viewerUrl = 'https://docs.google.com/viewer?url=' + encodeURIComponent(url) + '&embedded=true';
+                    }
+
                     document.getElementById("file-preview").src = url;
                     document.getElementById("doc-name").innerText = link.innerText;
                 });
             });
         });
     </script>
-
-
 </body>
 </html>

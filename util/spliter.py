@@ -23,13 +23,13 @@ def print_dict_tree(data_tree, indent=0):
             print_dict_tree(value, indent + 1)
 
 
-def dict_to_html_list(data_tree, base_path=""):
-    html = "<ul>"
+def dict_to_html_list(data_tree, base_path="", level=0):
+    html = f'<ul class="level-{level}">'
     for key, value in data_tree.items():
         full_path = f"{base_path}/{key}".strip("/")
         if value is None:
-            html += f'<li><a href="{full_path}">{key}</a></li>'
+            html += f'<li class="level-{level} file"><a href="{full_path}">{key}</a></li>'
         else:
-            html += f'<li>{key}{dict_to_html_list(value, full_path)}</li>'
+            html += f'<li class="level-{level} folder">{key}{dict_to_html_list(value, full_path, level + 1)}</li>'
     html += "</ul>"
     return html

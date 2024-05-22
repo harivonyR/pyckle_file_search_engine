@@ -33,3 +33,38 @@ ul {
 .flex-row{
     flex-direction: row;
 }
+
+#doc-name{
+    font-size: medium !important;
+}
+
+
+.search-container {
+
+}
+.search-bar {
+    display: flex;
+    border: 1px solid #dfe1e5;
+    border-radius: 24px;
+    padding: 5px 15px;
+    box-shadow: none;
+    height: 44px;
+    width: 100%;
+}
+.search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+}
+.search-bar button {
+    border: none;
+    background: none;
+    outline: none;
+    cursor: pointer;
+}
+.filter-section {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

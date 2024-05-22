@@ -59,7 +59,10 @@ async def refresh_index(request: Request):
 @app.post("/search", response_class=HTMLResponse)
 async def search_result(request: Request, search_string: str = Form(...), filter: Optional[str] = Form(None)):
     query = search_string
+    # PERFORM SEARCH
     res,matches,records = s.search_file(query) #FOLDER SEARCH#s.search_dir(query)
+    
+    # FILTERING
     
     # FORMATING RESULT
     res_dict = path_parse_dict(res)
