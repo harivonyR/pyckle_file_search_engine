@@ -3,19 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <link rel="stylesheet" href="static/result.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Search Results</title>
 </head>
 <body>
-    <h1>Welcome to Home Page</h1>
-    <h1><a href="/restatic">to res static</a></h1>
-    <h1><a href="/refresh_index">refresh index</a></h1>
+    <div class="search-container d-flex justify-content-center align-self-center" style="height: 100px;">
+        <form id="search-form" class="d-flex" method="post" action="/search">
+            <div class="d-flex flex-column align-self-center mb-3">
+                <div class="input-group mb-1">
+                    <input type="text" class="input-group rounded form-control" style="width: 300px;" id="search_string" name="search_string" placeholder="Search" value="">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Search</button>
+                    </div>
+                    <div id="loading-spinner" class="d-none">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="d-flex flex-row">
+                    <div class="d-flex align-self-center">
+                        <div>
+                            <label for="station" class="form-check-label">Station</label>
+                            <input type="checkbox" id="station" class="form-check-input" name="filter_type" value="station" checked>
+                        </div>
+                        <div>
+                            <label for="client" class="form-check-label">Client</label>
+                            <input type="checkbox" class="form-check-input" id="client" name="filter_type" value="client" checked>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="stations_dropdown">Stations:</label>
+                        <select id="stations_dropdown" class="d-form-control form-control-sm" name="stations_dropdown">
+                            <option value="station1">Station 1</option>
+                            <option value="station2">Station 2</option>
+                        </select>
+                    </div>
 
-    <form action="/search" method="post">
-        <label for="search_string">Search String:</label>
-        <input type="text" id="search_string" name="search_string" required>
-        <label for="filter">Filter:</label>
-        <input type="text" id="filter" name="filter">
-        <button type="submit">Search</button>
-    </form>
+                    <div>
+                        <label for="clients_dropdown">Clients:</label>
+                        <select id="clients_dropdown" class="d-form-control form-control-sm" name="clients_dropdown">
+                            <option value="client1">Client 1</option>
+                            <option value="client2">Client 2</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </body>
-</html>

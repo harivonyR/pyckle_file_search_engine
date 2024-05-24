@@ -75,6 +75,26 @@ async def search_result(request: Request, search_string: str = Form(...), filter
                                        "response": tree_html
                                       })
 
+@app.post("/search_async", response_class=HTMLResponse)
+async def search_result(
+    request: Request, 
+    search_string: str = Form(...), 
+    filter_type: list[str] = Form([]), 
+    stations_dropdown: Optional[str] = Form(None), 
+    clients_dropdown: Optional[str] = Form(None)
+):
+    query = search_string
+
+    # Perform search
+    res, matches, records = s.search_file(query)
+
+    # Apply filters if any
+    # Format result
+    res_dict = path_parse_dict(res)
+    tree_html = dict_to_html_list(res_dict, base_path="/view_file/")
+
+    return tree_html
+
 @app.get("/view_file/{file_path:path}", response_class=HTMLResponse)
 async def serve_file(request: Request, file_path: str):
     print(f"A file is trigere {file_path}")

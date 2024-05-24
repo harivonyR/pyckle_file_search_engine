@@ -9,41 +9,42 @@
 </head>
 <body>
     <div class="search-container d-flex justify-content-center align-self-center" style="height: 100px;">
-        <form action="/search" class="d-flex" method="post">
-            <div class="d-flex flex-column align-self-center m-3">
-                <div class="input-group m-2">
-                    <input type="text"class="input-group rounded form-control" style="width: 300px;" id="search_string" name="search_string" placeholder="Search" value="{{ search_string }}">
+        <form id="search-form" class="d-flex" method="post" enctype="application/x-www-form-urlencoded">
+            <div class="d-flex flex-column align-self-center mb-3">
+                <div class="input-group mb-1">
+                    <input type="text" class="input-group rounded form-control" style="width: 300px;" id="search_string" name="search_string" placeholder="Search" value="{{search_string}}">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="submit">Search</button>
-                      </div>
+                    </div>
+                    <div id="loading-spinner" class="d-none">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="filter-section d-flex flex-row">
-                    <div class="d-flex">
+                <div class="d-flex flex-row">
+                    <div class="d-flex align-self-center">
                         <div>
-                            <!-- -->
                             <label for="station" class="form-check-label">Station</label>
-                            <input type="checkbox" id="station"  class="form-check-input" name="filter_type" value="station" checked>
+                            <input type="checkbox" id="station" class="form-check-input" name="filter_type" value="station" checked>
                         </div>
                         <div>
                             <label for="client" class="form-check-label">Client</label>
-                            <input type="checkbox" class="form-check-input"   id="client" name="filter_type" value="client" checked>
+                            <input type="checkbox" class="form-check-input" id="client" name="filter_type" value="client" checked>
                         </div>
                     </div>
                     <div>
                         <label for="stations_dropdown">Stations:</label>
-                        <select id="stations_dropdown" class="d-form-control form-control-sm"  name="stations_dropdown">
+                        <select id="stations_dropdown" class="d-form-control form-control-sm" name="stations_dropdown">
                             <option value="station1">Station 1</option>
                             <option value="station2">Station 2</option>
                         </select>
                     </div>
-
                     <div>
                         <label for="clients_dropdown">Clients:</label>
                         <select id="clients_dropdown" class="d-form-control form-control-sm" name="clients_dropdown">
-                            <!-- Options should be dynamically populated -->
                             <option value="client1">Client 1</option>
                             <option value="client2">Client 2</option>
-                            <!-- Add more options as needed -->
                         </select>
                     </div>
                 </div>
@@ -55,8 +56,9 @@
         <div class="row">
             <div id="file-list" class="col-md-6 p-3">
                 <h4>DOCUMENT</h4>
-                <div>
-                    {{ response|safe }}
+                <div id="search-results">
+                    <!-- Response will be loaded here -->
+                    {{response | safe}}
                 </div>
             </div>
             <div id="preview" class="col-md-6 p-3" style="position: sticky; top: 20px;">
@@ -65,7 +67,7 @@
                     <div id="doc-name"></div>
                 </div>
                 <div class="sticky-top">
-                    <iframe id="file-preview" src=""></iframe>
+                    <iframe id="file-preview" src="" style="width:100%; height:600px;"></iframe>
                 </div>
             </div>
         </div>
@@ -75,23 +77,58 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <script>
+    <script defer>
         document.addEventListener("DOMContentLoaded", function() {
-            const links = document.querySelectorAll("#file-list a");
+            const form = document.getElementById("search-form");
+            const loadingSpinner = document.getElementById("loading-spinner");
 
-            links.forEach(link =>{
-                link.addEventListener("click", function(event){
-                    event.preventDefault();
-                    const url = link.getAttribute("href");
+            form.addEventListener("submit", function(event) {
+                event.preventDefault();
+                loadingSpinner.classList.remove("d-none");
 
-                    const fileExtension = url.split('.').pop();
+                const formData = new FormData(form);
+                const searchParams = new URLSearchParams(formData).toString();
 
-                    if(fileExtension === 'xlsx'){
-                        viewerUrl = 'https://docs.google.com/viewer?url=' + encodeURIComponent(url) + '&embedded=true';
-                    }
+                fetch("/search_async", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: searchParams
+                })
+                .then(response => response.text())
+                .then(data => {
+                    loadingSpinner.classList.add("d-none");
+                    //document.getElementById("search-results").innerHTML = data;
+                    const links = document.querySelectorAll("#file-list a");
 
-                    document.getElementById("file-preview").src = url;
-                    document.getElementById("doc-name").innerText = link.innerText;
+                    links.forEach(link => {
+                        link.addEventListener("click", function(event) {
+                            event.preventDefault();
+                            const url = link.getAttribute("href");
+
+                            const fileExtension = url.split('.').pop().toLowerCase();
+                            let viewerUrl;
+
+                            if (fileExtension === 'pdf') {
+                                viewerUrl = url; // Direct link for PDF
+                            } else if (fileExtension === 'xlsx') {
+                                viewerUrl = 'https://docs.google.com/viewer?url=' + encodeURIComponent(url) + '&embedded=true';
+                            } else {
+                                viewerUrl = ''; // Handle unsupported file types
+                                console.error('Unsupported file type:', fileExtension);
+                            }
+
+                            if (viewerUrl) {
+                                document.getElementById("file-preview").src = viewerUrl;
+                                document.getElementById("doc-name").innerText = link.innerText;
+                            }
+                        });
+                    });
+                })
+                .catch(error => {
+                    loadingSpinner.classList.add("d-none");
+                    console.error('Error:', error);
                 });
             });
         });
