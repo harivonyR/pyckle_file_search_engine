@@ -99,7 +99,7 @@
                 .then(response => response.text())
                 .then(data => {
                     loadingSpinner.classList.add("d-none");
-                    //document.getElementById("search-results").innerHTML = data;
+                    document.getElementById("search-results").innerHTML = data;
                     const links = document.querySelectorAll("#file-list a");
 
                     links.forEach(link => {

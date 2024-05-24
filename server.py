@@ -5,13 +5,10 @@ Created on Tue May 14 10:41:35 2024
 @author: harivonyratefiarison
 """
 
-"""
+# CONFIGURATION
 
-    CONFIGURATION    
-
-"""
 # API
-from typing import Optional
+from typing import Optional, List
 
 from fastapi import FastAPI, Form, Request, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse
@@ -25,7 +22,8 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # ENGINE
 from engine.pickle_search import SearchEngine
-from util.spliter import path_parse_dict, print_dict_tree,dict_to_html_list
+from util.spliter import path_parse_dict, print_dict_tree, dict_to_html_list
+
 s = SearchEngine()
 s.load_existing_index()
 
@@ -36,11 +34,7 @@ import os
 # EXTENSION HANDLER
 from util.extension import get_extension, get_media_type
 
-"""
-    
-    ROUTE
-
-"""
+# ROUTES
 
 @app.get("/", response_class=HTMLResponse)
 async def read_home(request: Request):
@@ -51,22 +45,23 @@ async def read_restatic(request: Request):
     return templates.TemplateResponse("restatic.html", {"request": request})
 
 @app.get("/refresh_index/{id}", response_class=HTMLResponse)
-async def refresh_index(request: Request):
-    print(f"> refresh triggered on :{id}")
-    #s.create_new_index()
+async def refresh_index(request: Request, id: str):
+    print(f"> refresh triggered on: {id}")
+    # Uncomment the following line if index creation is needed
+    # s.create_new_index()
     return RedirectResponse(url="/")
 
 @app.post("/search", response_class=HTMLResponse)
 async def search_result(request: Request, search_string: str = Form(...), filter: Optional[str] = Form(None)):
     query = search_string
     # PERFORM SEARCH
-    res,matches,records = s.search_file(query) #FOLDER SEARCH#s.search_dir(query)
+    res, matches, records = s.search_file(query)  # FOLDER SEARCH#s.search_dir(query)
     
     # FILTERING
     
-    # FORMATING RESULT
+    # FORMATTING RESULT
     res_dict = path_parse_dict(res)
-    tree_html  = dict_to_html_list(res_dict,base_path="/view_file/")
+    tree_html = dict_to_html_list(res_dict, base_path="/view_file/")
     
     return templates.TemplateResponse("result.html", 
                                       {"request": request, 
@@ -76,10 +71,10 @@ async def search_result(request: Request, search_string: str = Form(...), filter
                                       })
 
 @app.post("/search_async", response_class=HTMLResponse)
-async def search_result(
+async def search_result_async(
     request: Request, 
     search_string: str = Form(...), 
-    filter_type: list[str] = Form([]), 
+    filter_type: List[str] = Form([]), 
     stations_dropdown: Optional[str] = Form(None), 
     clients_dropdown: Optional[str] = Form(None)
 ):
@@ -95,20 +90,15 @@ async def search_result(
 
     return tree_html
 
-@app.get("/view_file/{file_path:path}", response_class=HTMLResponse)
-async def serve_file(request: Request, file_path: str):
-    print(f"A file is trigere {file_path}")
-    file_path = os.path.join("//", file_path)  # Adjust the base directory accordingly
+@app.get("/view_file/{file_path:path}")
+async def serve_file(file_path: str):
+    print(f"A file is triggered {file_path}")
+    file_path = os.path.join("/", file_path)  # Adjust the base directory accordingly
     
     if not os.path.isfile(file_path):
         raise HTTPException(status_code=404, detail="File not found")
 
-    async with aiofiles.open(file_path, 'r') as file:
-        #content = await file.read()
-
-        extension = get_extension(file_path)
-        media_type = get_media_type(extension)
-        
-        return FileResponse(file_path, media_type=media_type)
+    extension = get_extension(file_path)
+    media_type = get_media_type(extension)
     
-    return templates.TemplateResponse("view_file.html", {"request": request, "content": content, "file_path": file_path})
+    return FileResponse(file_path, media_type=media_type)
