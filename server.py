@@ -15,6 +15,10 @@ from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 
+from fastapi.middleware.cors import CORSMiddleware
+from urllib.parse import quote
+from pathlib import Path
+
 app = FastAPI()
 
 templates = Jinja2Templates(directory="templates")
@@ -35,6 +39,13 @@ import os
 from util.extension import get_extension, get_media_type
 
 # ROUTES
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # You can restrict this to specific origins for security
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/", response_class=HTMLResponse)
 async def read_home(request: Request):
@@ -44,11 +55,12 @@ async def read_home(request: Request):
 async def read_restatic(request: Request):
     return templates.TemplateResponse("restatic.html", {"request": request})
 
-@app.get("/refresh_index/{id}", response_class=HTMLResponse)
-async def refresh_index(request: Request, id: str):
-    print(f"> refresh triggered on: {id}")
-    # Uncomment the following line if index creation is needed
-    # s.create_new_index()
+@app.get("/refresh_index", response_class=HTMLResponse)
+async def refresh_index(request: Request):
+    print(f"> refresh triggered ")
+    s.create_new_index(r"//192.168.130.231/adv$/GED")
+    s.load_existing_index()
+    print(f"> refresh done ")
     return RedirectResponse(url="/")
 
 @app.post("/search", response_class=HTMLResponse)
