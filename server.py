@@ -102,15 +102,20 @@ async def search_result_async(
 
     return tree_html
 
-@app.get("/view_file/{file_path:path}")
-async def serve_file(file_path: str):
-    print(f"A file is triggered {file_path}")
-    file_path = os.path.join("/", file_path)  # Adjust the base directory accordingly
+@app.get("/view_file/{file_path:path}", response_class=HTMLResponse)
+async def serve_file(request: Request, file_path: str):
+    print(f"A file is trigere {file_path}")
+    file_path = os.path.join("//", file_path)  # Adjust the base directory accordingly
     
     if not os.path.isfile(file_path):
         raise HTTPException(status_code=404, detail="File not found")
 
-    extension = get_extension(file_path)
-    media_type = get_media_type(extension)
+    async with aiofiles.open(file_path, 'r') as file:
+        #content = await file.read()
+
+        extension = get_extension(file_path)
+        media_type = get_media_type(extension)
+        
+        return FileResponse(file_path, media_type=media_type)
     
-    return FileResponse(file_path, media_type=media_type)
+    return templates.TemplateResponse("view_file.html", {"request": request, "content": content, "file_path": file_path})
