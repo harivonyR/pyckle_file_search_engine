@@ -63,6 +63,11 @@ async def refresh_index(request: Request):
     print(f"> refresh done ")
     return RedirectResponse(url="/")
 
+@app.get("/search")
+async def read_home(request: Request):
+    s.load_existing_index()
+    return templates.TemplateResponse("result.html", {"request": request})
+
 @app.post("/search", response_class=HTMLResponse)
 async def search_result(request: Request, search_string: str = Form(...), filter: Optional[str] = Form(None)):
     query = search_string

@@ -19,7 +19,7 @@ while(status=="Y"):
     # SEARCH
     query = input("> Enter your query :")
     
-    res,matches,records = s.search_file(query) #FOLDER SEARCH#s.search_dir(query)
+    res,matches,records = s.search_file(query) 
     
     # FORMATING RESULT
     res_dict = path_parse_dict(res)
