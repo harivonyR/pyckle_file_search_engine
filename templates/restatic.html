@@ -26,33 +26,88 @@
         }
         .search-input-container {
             position: relative;
-            width: 60%;
+            width: 70%;
         }
         .btn-toggle-group {
             margin-left: 10px;
         }
+        .btn-outline-primary.active {
+            background-color: #007bff;
+            color: white;
+        }
+        @media (max-width: 1200px) {
+            .btn label input[type="checkbox"] {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="search-bar justify-content-center">
+    <div class="container mt-2">
+        <div class="mb-5">
+            <div class="d-flex justify-content-between">
+                <div class="h4">JOVENA</div>
+                <div class="h4">Source d'energie</div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <p style="font-size: small;">ADV- Gestion de Dossier</p>
+                <p style="font-size: small;">get helped</p>
+            </div>
+        </div>
+        
+        <div class="search-bar d-flex align-items-center justify-content-start">
             <div class="search-input-container">
                 <input type="text" class="form-control search-input" placeholder="Votre recherche ici ....">
                 <i class="fa fa-search search-icon"></i>
             </div>
-            <div class="btn-toggle-group" data-toggle="buttons">
-                <label class="btn btn-outline-primary btn-sm mb-0">
-                    <input type="checkbox" autocomplete="off"> CLIENT
-                </label>
-                <label class="btn btn-outline-primary btn-sm mb-0">
-                    <input type="checkbox" autocomplete="off"> STATION
-                </label>
-            </div>
+            <div class="d-flex align-items-center">
+                <div class="btn btn-outline-primary ml-2 btn-sm">
+                    <label class="mb-0">
+                        <input type="checkbox" autocomplete="off" checked> CLIENT
+                    </label>
+                </div>
+                <div class="btn btn-outline-primary ml-2 btn-sm">
+                    <label class="mb-0">
+                        <input type="checkbox" autocomplete="off" checked> STATION
+                    </label>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-light btn-outline-secondary dropdown-toggle btn-sm ml-2" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      TYPE FICHIER
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a class="dropdown-item" href="#">Action</a>
+                      <a class="dropdown-item" href="#">Another action</a>
+                      <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+            </div>  
         </div>
+        
     </div>
     
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('input[type="checkbox"]').each(function() {
+                var $checkbox = $(this);
+                var $btn = $checkbox.closest('.btn');
+                
+                if ($checkbox.is(':checked')) {
+                    $btn.addClass('active');
+                }
+
+                $checkbox.change(function() {
+                    if ($checkbox.is(':checked')) {
+                        $btn.addClass('active');
+                    } else {
+                        $btn.removeClass('active');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

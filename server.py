@@ -124,3 +124,12 @@ async def serve_file(request: Request, file_path: str):
         return FileResponse(file_path, media_type=media_type)
     
     return templates.TemplateResponse("view_file.html", {"request": request, "content": content, "file_path": file_path})
+'''
+# to implement
+@app.get("/client/{client_name:str}", response_class=HTMLResponse)
+async def get_client(request: Request, client_name:str):
+    base_path = get_client_path(client_name)
+    res = get_file(base_path)
+
+@app.get("/station/{station_name:str}", response_class=HTMLResponse)
+'''
