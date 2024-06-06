@@ -1,21 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/css/result.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <title>Search Results</title>
+    <style>
+        .search-bar {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            border-radius: 25px;
+            padding-left: 20px;
+            padding-right: 40px;
+            /* To make space for the icon */
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            color: #999;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .search-input-container {
+            position: relative;
+            width: 70%;
+        }
+
+        .btn-toggle-group {
+            margin-left: 10px;
+        }
+
+        .btn-outline-primary.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        @media (max-width: 1200px) {
+            .btn label input[type="checkbox"] {
+                display: none;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <div class="search-container d-flex justify-content-center align-self-center" style="height: 100px;">
-        <form id="search-form" class="d-flex" method="post" enctype="application/x-www-form-urlencoded">
-            <div class="d-flex flex-column align-self-center mb-3">
-                <div class="input-group mb-1">
-                    <input type="text" class="input-group rounded form-control" style="width: 300px;" id="search_string" name="search_string" placeholder="Search" value="{{search_string}}">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="submit">Search</button>
+
+    <div class="container mt-2 mb-3">
+        <div class="mb-5 ">
+            <div class="d-flex justify-content-between">
+                <div class="h4">JOVENA</div>
+                <div class="h4">Source d'energie</div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <p style="font-size: small;">ADV- Gestion de Dossier</p>
+                <p style="font-size: small;">get helped</p>
+            </div>
+        </div>
+
+        <form form id="search-form" class="d-flex" method="post" enctype="application/x-www-form-urlencoded">
+            <div class="search-bar d-flex align-items-center justify-content-start mb-3">
+
+                <div class="search-input-container">
+                    <input type="text" id="search_string" name="search_string" value="{{search_string}}"
+                        class="form-control search-input" placeholder="Votre recherche ici ....">
+                    <i class="fa fa-search search-icon"></i>
+                </div>
+
+
+                <div class="d-flex align-items-center">
+                    <div class="btn btn-outline-primary ml-2 btn-sm">
+                        <label class="mb-0">
+                            <input type="checkbox" autocomplete="off" checked> CLIENT
+                        </label>
+                    </div>
+                    <div class="btn btn-outline-primary ml-2 btn-sm">
+                        <label class="mb-0">
+                            <input type="checkbox" autocomplete="off" checked> STATION
+                        </label>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-light btn-outline-secondary dropdown-toggle btn-sm ml-2" type="button"
+                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            TYPE FICHIER
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
                     </div>
                     <div id="loading-spinner" class="d-none">
                         <div class="spinner-border" role="status">
@@ -23,75 +104,77 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-flex flex-row">
-                    <div class="d-flex align-self-center">
-                        <div>
-                            <label for="station" class="form-check-label">Station</label>
-                            <input type="checkbox" id="station" class="form-check-input" name="filter_type" value="station" checked>
-                        </div>
-                        <div>
-                            <label for="client" class="form-check-label">Client</label>
-                            <input type="checkbox" class="form-check-input" id="client" name="filter_type" value="client" checked>
-                        </div>
-                    </div>
-                    <div>
-                        <label for="stations_dropdown">Stations:</label>
-                        <select id="stations_dropdown" class="d-form-control form-control-sm" name="stations_dropdown">
-                            <option value="station1">Station 1</option>
-                            <option value="station2">Station 2</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="clients_dropdown">Clients:</label>
-                        <select id="clients_dropdown" class="d-form-control form-control-sm" name="clients_dropdown">
-                            <option value="client1">Client 1</option>
-                            <option value="client2">Client 2</option>
-                        </select>
-                    </div>
-                </div>
             </div>
         </form>
-    </div>
-    
-    <div class="container-fluid">
-        <div class="row">
-            <div id="file-list" class="col-md-6 p-3">
-                <h4>DOCUMENT</h4>
-                <div id="search-results">
-                    <!-- Response will be loaded here -->
-                    {{response | safe}}
+        <div class="container-fluid">
+            <div class="row">
+                <div id="file-list" class="col-md-6 p-3">
+                    <h4>DOCUMENT</h4>
+                    <div id="search-results">
+                        <!-- Response will be loaded here -->
+                        {{response | safe}}
+                    </div>
                 </div>
-            </div>
-            <div id="preview" class="col-md-6 p-3" style="position: sticky; top: 20px;">
-                <div class="d-flex align-items-center">
-                    <div><h4>PREVIEW /</h4></div>
-                    <div id="doc-name"></div>
-                </div>
-                <div class="sticky-top">
-                    <iframe id="file-preview" src="" style="width:100%; height:600px;"></iframe>
+                <div id="preview" class="col-md-6 p-3" style="position: sticky; top: 20px;">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <h4>PREVIEW /</h4>
+                        </div>
+                        <div id="doc-name"></div>
+                    </div>
+                    <div class="sticky-top">
+                        <iframe id="file-preview" src="" style="width:100%; height:600px;"></iframe>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('input[type="checkbox"]').each(function () {
+                var $checkbox = $(this);
+                var $btn = $checkbox.closest('.btn');
+
+                if ($checkbox.is(':checked')) {
+                    $btn.addClass('active');
+                }
+
+                $checkbox.change(function () {
+                    if ($checkbox.is(':checked')) {
+                        $btn.addClass('active');
+                    } else {
+                        $btn.removeClass('active');
+                    }
+                });
+            });
+        });
+    </script>
+
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script async>
         console.log('js [OK]')
 
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             console.log("> result.js [ok]")
             const form = document.getElementById("search-form");
             const loadingSpinner = document.getElementById("loading-spinner");
-        
-            form.addEventListener("submit", function(event) {
+
+            form.addEventListener("submit", function (event) {
                 event.preventDefault();
                 loadingSpinner.classList.remove("d-none");
-        
+
                 const formData = new FormData(form);
                 const searchParams = new URLSearchParams(formData).toString();
-        
+
                 fetch("/search_async", {
                     method: "POST",
                     headers: {
@@ -99,46 +182,45 @@
                     },
                     body: searchParams
                 })
-                .then(response => response.text())
-                .then(data => {
-                    console.log("> data response [ok]");
-                    loadingSpinner.classList.add("d-none");
-                    document.getElementById("search-results").innerHTML = data;
-                    const links = document.querySelectorAll("#file-list a");
-        
-                    links.forEach(link => {
-                        link.addEventListener("click", function(event) {
-                            console.log("> prevent default [ok]");
-                            event.preventDefault();
-                            const url = link.getAttribute("href");
-        
-                            const fileExtension = url.split('.').pop().toLowerCase();
-                            let viewerUrl;
-        
-                            if (fileExtension === 'pdf') {
-                                viewerUrl = url; // Direct link for PDF
-                            } else if (fileExtension === 'xlsx') {
-                                viewerUrl = 'https://docs.google.com/viewer?url=' + encodeURIComponent(url) + '&embedded=true';
-                            } else {
-                                viewerUrl = ''; // Handle unsupported file types
-                                console.error('Unsupported file type:', fileExtension);
-                            }
-        
-                            if (viewerUrl) {
-                                document.getElementById("file-preview").src = viewerUrl;
-                                document.getElementById("doc-name").innerText = link.innerText;
-                            }
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log("> data response [ok]");
+                        loadingSpinner.classList.add("d-none");
+                        document.getElementById("search-results").innerHTML = data;
+                        const links = document.querySelectorAll("#file-list a");
+
+                        links.forEach(link => {
+                            link.addEventListener("click", function (event) {
+                                console.log("> prevent default [ok]");
+                                event.preventDefault();
+                                const url = link.getAttribute("href");
+
+                                const fileExtension = url.split('.').pop().toLowerCase();
+                                let viewerUrl;
+
+                                if (fileExtension === 'pdf') {
+                                    viewerUrl = url; // Direct link for PDF
+                                } else if (fileExtension === 'xlsx') {
+                                    viewerUrl = 'https://docs.google.com/viewer?url=' + encodeURIComponent(url) + '&embedded=true';
+                                } else {
+                                    viewerUrl = ''; // Handle unsupported file types
+                                    console.error('Unsupported file type:', fileExtension);
+                                }
+
+                                if (viewerUrl) {
+                                    document.getElementById("file-preview").src = viewerUrl;
+                                    document.getElementById("doc-name").innerText = link.innerText;
+                                }
+                            });
                         });
+                    })
+                    .catch(error => {
+                        loadingSpinner.classList.add("d-none");
+                        console.error('Error:', error);
                     });
-                })
-                .catch(error => {
-                    loadingSpinner.classList.add("d-none");
-                    console.error('Error:', error);
-                });
             });
         });</script>
-    
-        
-    </script>
+
 </body>
+
 </html>
