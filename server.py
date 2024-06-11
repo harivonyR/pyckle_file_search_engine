@@ -49,7 +49,7 @@ app.add_middleware(
 
 @app.get("/", response_class=HTMLResponse)
 async def read_home(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
+    return templates.TemplateResponse("result.html", {"request": request})
 
 @app.get("/restatic", response_class=HTMLResponse)
 async def read_restatic(request: Request):

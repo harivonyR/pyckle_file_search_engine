@@ -45,9 +45,12 @@ ul {
     width: 100%;
 }
 
+.form-control{
+    border-radius: inherit !important;
+}
 .search-input {
     flex: 1;
-    border-radius: 25px;
+    border-radius: 25px !important;
     padding-left: 20px;
     padding-right: 40px;
     /* To make space for the icon */
