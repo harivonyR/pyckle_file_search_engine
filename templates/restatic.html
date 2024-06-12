@@ -3,56 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Bar with Toggle Buttons</title>
+    <title>Custom Dropdown Multiple Selection</title>
+    <link rel="stylesheet" href="static/css/dropdown.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        .search-bar {
-            display: flex;
-            align-items: center;
-        }
-        .search-input {
-            flex: 1;
-            border-radius: 25px;
-            padding-left: 20px;
-            padding-right: 40px; /* To make space for the icon */
-        }
-        .search-icon {
-            position: absolute;
-            right: 15px;
-            color: #999;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        .search-input-container {
-            position: relative;
-            width: 60%;
-        }
-        .btn-toggle-group {
-            margin-left: 10px;
-        }
-    </style>
+    <script src="static/script/dropdown.js" defer></script>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="search-bar justify-content-center">
-            <div class="search-input-container">
-                <input type="text" class="form-control search-input" placeholder="Votre recherche ici ....">
-                <i class="fa fa-search search-icon"></i>
-            </div>
-            <div class="btn-toggle-group" data-toggle="buttons">
-                <label class="btn btn-outline-primary btn-sm mb-0">
-                    <input type="checkbox" autocomplete="off"> CLIENT
-                </label>
-                <label class="btn btn-outline-primary btn-sm mb-0">
-                    <input type="checkbox" autocomplete="off"> STATION
-                </label>
+    <div class="container mt-3">
+        <div class="dropdown-multiselect">
+            <button class="btn btn-light btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
+                TYPE FICHIER
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <label><input type="checkbox" value="PDF"> PDF</label>
+                <label><input type="checkbox" value="XLSX"> XLSX</label>
+                <label><input type="checkbox" value="JPEG"> JPEG</label>
             </div>
         </div>
     </div>
+
     
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

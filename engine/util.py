@@ -3,7 +3,7 @@ import pickle
 
 def get_child(base_path):
     base_path = base_path.replace("\\", "/")
-    child_dirs = set()  # Use a set to avoid duplicates
+    child_dirs = set()  # Utilisation d'un set pour éviter les doublons
 
     try:
         with open('engine/file_index.pkl', 'rb') as f:
@@ -25,10 +25,21 @@ def get_child(base_path):
     
     return list(child_dirs)
 
+def path_to_dict(paths):
+    path_dict = {}
+    for path in paths:
+        key = os.path.basename(path)  # Le dernier segment du chemin
+        path_dict[key] = path
+    return path_dict
+
 # Serve client list
 def get_client_list():
     client_base_path = r"//192.168.130.231/adv$/GED/CLIENTS"
-    return get_child(client_base_path)
+    client_paths = get_child(client_base_path)
+    return path_to_dict(client_paths)
+
+def get_file_list(base_path, level=[1]):
+    return []
 
 # Serve station list
 def get_station_list():
@@ -36,10 +47,8 @@ def get_station_list():
 
 if __name__ == "__main__":
     clients = get_client_list()
-    for client in clients:
-        print(client)
-
-
+    for client, path in clients.items():
+        print(f"Client: {client}, Path: {path}")
 
 '''
     filter : station/client, 
