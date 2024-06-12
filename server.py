@@ -26,7 +26,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # ENGINE
 from engine.pickle_search import SearchEngine
-from engine.util import get_client_list
+from engine.util import get_client_list,get_station_list
 from util.spliter import path_parse_dict, print_dict_tree, dict_to_html_list
 
 s = SearchEngine()
@@ -92,6 +92,11 @@ async def search_result(request: Request, search_string: str = Form(...), filter
 async def list_client():
     client_list_dict = get_client_list()
     return JSONResponse(content=list(client_list_dict.keys()))
+
+@app.get("/list_station", response_model=List[str])
+async def list_station():
+    station_list = get_station_list()
+    return station_list
 
 @app.post("/search_async", response_class=HTMLResponse)
 async def search_result_async(
