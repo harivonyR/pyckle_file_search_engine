@@ -26,6 +26,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # ENGINE
 from engine.pickle_search import SearchEngine
+from engine.util import get_client_list
 from util.spliter import path_parse_dict, print_dict_tree, dict_to_html_list
 
 s = SearchEngine()
@@ -87,6 +88,11 @@ async def search_result(request: Request, search_string: str = Form(...), filter
                                        "response": tree_html
                                       })
 
+@app.get("/list_client", response_class=HTMLResponse)
+async def list_client():
+    client_list_dict = get_client_list()
+    return client_list_dict
+
 @app.post("/search_async", response_class=HTMLResponse)
 async def search_result_async(
     request: Request, 
@@ -96,9 +102,13 @@ async def search_result_async(
     clients_dropdown: Optional[str] = Form(None)
 ):
     query = search_string
-
-    # Perform search
-    res, matches, records = s.search_file(query)
+    client_list_dict = get_client_list()
+    # correcte code here
+    if search_string in client_list_dict:
+        client_path = client_list_dict[search_string]
+        res, matches, records = s.search_in_path(client_path)
+    else :
+        res, matches, records = s.search_file(query)
 
     # Apply filters if any
     # Format result
@@ -124,6 +134,9 @@ async def serve_file(request: Request, file_path: str):
         return FileResponse(file_path, media_type=media_type)
     
     return templates.TemplateResponse("view_file.html", {"request": request, "content": content, "file_path": file_path})
+
+
+
 '''
 # to implement
 @app.get("/client/{client_name:str}", response_class=HTMLResponse)
