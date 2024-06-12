@@ -11,7 +11,7 @@ Created on Tue May 14 10:41:35 2024
 from typing import Optional, List
 
 from fastapi import FastAPI, Form, Request, HTTPException
-from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse,JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 
@@ -88,10 +88,10 @@ async def search_result(request: Request, search_string: str = Form(...), filter
                                        "response": tree_html
                                       })
 
-@app.get("/list_client", response_class=HTMLResponse)
+@app.get("/list_client", response_class=JSONResponse)
 async def list_client():
     client_list_dict = get_client_list()
-    return client_list_dict
+    return JSONResponse(content=list(client_list_dict.keys()))
 
 @app.post("/search_async", response_class=HTMLResponse)
 async def search_result_async(
@@ -103,7 +103,7 @@ async def search_result_async(
 ):
     query = search_string
     client_list_dict = get_client_list()
-    # correcte code here
+    
     if search_string in client_list_dict:
         client_path = client_list_dict[search_string]
         res, matches, records = s.search_in_path(client_path)

@@ -36,7 +36,7 @@ def path_to_dict(paths):
 def get_client_list():
     client_base_path = r"//192.168.130.231/adv$/GED/CLIENTS"
     client_paths = get_child(client_base_path)
-    return path_to_dict(client_paths)
+    return path_to_dict(sorted(client_paths))
 
 def get_file_list(base_path, level=[1]):
     return []
